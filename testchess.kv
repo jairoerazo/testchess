@@ -1,72 +1,106 @@
-<Canvas>:
-  orientation: "vertical"
+#:import SlideTransition kivy.uix.screenmanager.SlideTransition
+<MyScreenManager>:
+  transition: SlideTransition()
+  WindowMain:
+  WindowQuestion:
+  WindowFeedback:
 
-  BoxLayout:
-    size_hint: None, None
-    pos_hint: {'top': 1}
-    size: 600, 600
-    Image:
-      size_hint: 1, 1
-      source: 'img/diagram040.png'
+<WindowMain>:
+  name: "main"
   BoxLayout:
     orientation: "vertical"
-    spacing: 5
-    BoxLayout:
-      size_hint_y: .3
-      padding: 10
-      Label:
-        id: enunciado
-        text_size: self.size
-        text: "De acuerdo a los temas estudiados, el usuario puede escoger posiciones estudiadas y jugar contra el computador a partir de ellas"
-        #text: "Pregunta"
-        halign: 'left'
-        valign: 'top'
-    GridLayout:
-      cols: 2
-      size_hint_y: .6
-      CheckBox:
-        group: "r"
-        id: r1
-        size_hint_x: 0.12
-      Label:
-        id: text_r1
-        text_size: self.size
-        text: "Respuesta 1"
-        valign: 'middle'
-      CheckBox:
-        group: "r"
-        id: r2
-        size_hint_x: 0.12
-      Label:
-        id: text_r2
-        text_size: self.size
-        text: "Respuesta 2"
-        valign: 'middle'
-      CheckBox:
-        group: "r"
-        id: r3
-        size_hint_x: 0.12
-      Label:
-        id: text_r3
-        text_size: self.size
-        text: "Respuesta 3"
-        valign: 'middle'
-      CheckBox:
-        group: "r"
-        id: r4
-        size_hint_x: 0.12
-      Label:
-        id: text_r4
-        text_size: self.size
-        text: "Respuesta 4"
-        valign: 'middle'
-    BoxLayout:
-      orientation: "horizontal"
-      size_hint_y: .1
-      Button:
-        text: "<"
-      Button:
-        text: ">"
-        on_press: root.on_press_bt()
+    Label:
+      text: 'Seleccione el nivel'
+    Button:
+      text: "Nivel uno"
+      on_release: app.root.current= 'question'; app.root.get_screen('question').load_question()
+    Button:
+      text: "Nivel dos"
 
-Canvas:
+<WindowQuestion>:
+  name: "question"
+  r1: chk_r1
+  r2: chk_r2
+  r3: chk_r3
+  r4: chk_r4
+
+  BoxLayout:
+    orientation: "vertical"
+
+    BoxLayout:
+      pos_hint: {"center_x": .5, "center_y": .5}
+      size_hint_y: .4
+      Image:
+        #size_hint: 1.0, 1.0
+        source: 'img/diagram040.png'
+        pos: self.pos
+        size: self.size
+    BoxLayout:
+      orientation: "vertical"
+      spacing: 5
+      size_hint_y: .6
+      BoxLayout:
+        size_hint_y: .28
+        padding: 10
+        Label:
+          id: enunciado
+          text_size: self.size
+          halign: 'left'
+          valign: 'top'
+      GridLayout:
+        cols: 2
+        size_hint_y: .6
+        CheckBox:
+          group: "r"
+          id: chk_r1
+          size_hint_x: 0.12
+        Label:
+          id: text_r1
+          text_size: self.size
+          valign: 'middle'
+        CheckBox:
+          group: "r"
+          id: chk_r2
+          size_hint_x: 0.12
+        Label:
+          id: text_r2
+          text_size: self.size
+          valign: 'middle'
+        CheckBox:
+          group: "r"
+          id: chk_r3
+          size_hint_x: 0.12
+        Label:
+          id: text_r3
+          text_size: self.size
+          valign: 'middle'
+        CheckBox:
+          group: "r"
+          id: chk_r4
+          size_hint_x: 0.12
+        Label:
+          id: text_r4
+          text_size: self.size
+          valign: 'middle'
+      BoxLayout:
+        orientation: "horizontal"
+        size_hint_y: .12
+        Button:
+          text: "<"
+        Button:
+          text: "Inicio"
+          on_release: app.root.current = "main"
+        Button:
+          text: ">"
+          on_press: app.root.current= 'feedback'; app.root.get_screen('feedback').evaluar_pregunta(app.root.get_screen('question').set_answer())
+
+<WindowFeedback>:
+  name: "feedback"
+  BoxLayout:
+    orientation: "vertical"
+    Label:
+      id: eval
+      text: 'Evaluación'
+    Button:
+      text: "Continuar"
+      on_release: app.root.current= 'question'; app.root.get_screen('question').load_question()

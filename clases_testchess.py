@@ -3,6 +3,7 @@
 class Test:
     def __init__(self):
         self.__list_preguntas = []
+        self.__index = 0
 
     def impPreguntas(self):
         # list_preguntas es un una lista de objetos tipo Pregunta
@@ -26,6 +27,18 @@ class Test:
             p_obj_list[-1].setRespCorrecta(int(pl[-1]))
         self.__list_preguntas = p_obj_list
         return p_obj_list
+
+    def nextQuestion(self):
+        if self.__index <= (len(self.__list_preguntas) - 1):
+            next_question = self.__list_preguntas[self.__index]
+            self.__index += 1
+            return next_question
+        else:
+            self.__index = 0
+            return False
+
+    def getIndex(self):
+        return self.__index
 
 class Pregunta:
     def __init__(self, enunciado = "Enunciado"):
@@ -62,25 +75,3 @@ class Pregunta:
 
     def getRespCorrecta(self):
         return self.__resp_correcta
-
-class Bidirectional_iterator(object):
-    def __init__(self, collection):
-        self.collection = collection
-        self.index = 0
-
-    def next(self):
-        try:
-            result = self.collection[self.index]
-            self.index += 1
-        except IndexError:
-            raise StopIteration
-        return result
-
-    def prev(self):
-        self.index -= 1
-        if self.index < 0:
-            raise StopIteration
-        return self.collection[self.index]
-
-    def __iter__(self):
-        return self

@@ -1,0 +1,3 @@
+title=TestChess
+author=IuT
+orientation=portrait
