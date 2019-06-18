@@ -1,10 +1,3 @@
-#:import SlideTransition kivy.uix.screenmanager.SlideTransition
-<MyScreenManager>:
-  transition: SlideTransition()
-  WindowMain:
-  WindowQuestion:
-  WindowFeedback:
-
 <WindowMain>:
   name: "main"
   BoxLayout:
@@ -12,10 +5,55 @@
     Label:
       text: 'Seleccione el nivel'
     Button:
-      text: "Nivel uno"
-      on_release: app.root.current= 'question'; app.root.get_screen('question').load_question()
+      text: "Fundamentos"
+      on_release: app.root.current= 'levels'; app.root.get_screen('levels').level= 0; app.root.get_screen('levels').load_levels(0)
     Button:
-      text: "Nivel dos"
+      text: "Principiante"
+      on_release: app.root.current= 'levels'; app.root.get_screen('levels').level= 1; app.root.get_screen('levels').load_levels(1)
+    Button:
+      text: "Aficionado"
+      on_release: app.root.current= 'levels'; app.root.get_screen('levels').level= 2; app.root.get_screen('levels').load_levels(2)
+
+<WindowLevels>:
+  name: "levels"
+  id: levels
+  BoxLayout:
+    orientation: "vertical"
+    Label:
+      text: 'Seleccione un test'
+    GridLayout:
+      rows: 2
+      Button:
+        id: l1
+        text: "Test 1"
+        on_release: app.root.current= 'question'; app.root.get_screen('question').load_testfile(levels.level, sublevel=1)
+      Button:
+        id: l2
+        text: "Test 2"
+        on_release: app.root.current= 'question'; app.root.get_screen('question').load_testfile(levels.level, sublevel=2)
+      Button:
+        id: l3
+        text: "Test 3"
+        on_release: app.root.current= 'question'; app.root.get_screen('question').load_testfile(levels.level, sublevel=3)
+      Button:
+        id: l4
+        text: "Test 4"
+        on_release: app.root.current= 'question'; app.root.get_screen('question').load_testfile(levels.level, sublevel=4)
+      Button:
+        id: l5
+        text: "Test 5"
+        on_release: app.root.current= 'question'; app.root.get_screen('question').load_testfile(levels.level, sublevel=5)
+      Button:
+        id: l6
+        text: "Test 6"
+        on_release: app.root.current= 'question'; app.root.get_screen('question').load_testfile(levels.level, sublevel=6)
+
+<TCCheckBox@CheckBox>:
+  color: 1, 1, 1, 1
+
+<TCLabel@ButtonBehavior+Label>:
+  text_size: self.size
+  color: 1, 1, 1, 1
 
 <WindowQuestion>:
   name: "question"
@@ -29,16 +67,11 @@
 
     BoxLayout:
       pos_hint: {"center_x": .5, "center_y": .5}
-      size_hint_y: .4
-      Image:
-        #size_hint: 1.0, 1.0
-        source: 'img/diagram040.png'
-        pos: self.pos
-        size: self.size
+      size_hint_y: .45
     BoxLayout:
       orientation: "vertical"
       spacing: 5
-      size_hint_y: .6
+      size_hint_y: .55
       BoxLayout:
         size_hint_y: .28
         padding: 10
@@ -50,49 +83,51 @@
       GridLayout:
         cols: 2
         size_hint_y: .6
-        CheckBox:
+        TCCheckBox:
           group: "r"
           id: chk_r1
           size_hint_x: 0.12
-        Label:
+        TCLabel:
           id: text_r1
           text_size: self.size
           valign: 'middle'
-        CheckBox:
+          on_press: chk_r1._do_press()
+        TCCheckBox:
           group: "r"
           id: chk_r2
           size_hint_x: 0.12
-        Label:
+        TCLabel:
           id: text_r2
           text_size: self.size
           valign: 'middle'
-        CheckBox:
+          on_press: chk_r2._do_press()
+        TCCheckBox:
           group: "r"
           id: chk_r3
           size_hint_x: 0.12
-        Label:
+        TCLabel:
           id: text_r3
           text_size: self.size
           valign: 'middle'
-        CheckBox:
+          on_press: chk_r3._do_press()
+        TCCheckBox:
           group: "r"
           id: chk_r4
           size_hint_x: 0.12
-        Label:
+        TCLabel:
           id: text_r4
           text_size: self.size
           valign: 'middle'
+          on_press: chk_r4._do_press()
       BoxLayout:
         orientation: "horizontal"
         size_hint_y: .12
         Button:
-          text: "<"
-        Button:
           text: "Inicio"
           on_release: app.root.current = "main"
         Button:
-          text: ">"
-          on_press: app.root.current= 'feedback'; app.root.get_screen('feedback').evaluar_pregunta(app.root.get_screen('question').set_answer())
+          text: "Evaluar"
+          on_press: app.root.current= 'feedback'; app.root.get_screen('feedback').evaluar_pregunta(app.root.get_screen('question').set_answer(), app.root.get_screen('question').test)
 
 <WindowFeedback>:
   name: "feedback"
@@ -104,3 +139,20 @@
     Button:
       text: "Continuar"
       on_release: app.root.current= 'question'; app.root.get_screen('question').load_question()
+
+<WindowEndTest>:
+  name: "endtest"
+  #result: id_result
+  BoxLayout:
+    orientation: "vertical"
+    Label:
+      text: 'Puntaje obtenido:'
+    Label:
+      id: id_result
+      text: 'Puntos'
+    Button:
+      text: "Inicio"
+      on_release: app.root.current = "main"
+
+<SvgWidget>:
+  do_rotation: False
